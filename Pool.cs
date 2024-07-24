@@ -6,7 +6,7 @@ namespace LogansPoolingSystem
     public class Pool : MonoBehaviour
     {
         [Header("---------------[[ FOR PREFAB INSTANTIATION ]]-----------------")]
-        [SerializeField, Tooltip("Optional prefab to fill out the pooledObjects list with. If this is set, it will overwrite pooledObjects on start()")]
+        [SerializeField, Tooltip("Prefab for spawning the pool with")]
         private GameObject poolPrefab;
 
         //[Header("---------------[[ REFERENCE ]]-----------------")]
