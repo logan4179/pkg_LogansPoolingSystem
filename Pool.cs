@@ -7,19 +7,19 @@ namespace LogansPoolingSystem
     {
         [Header("---------------[[ FOR PREFAB INSTANTIATION ]]-----------------")]
         [SerializeField, Tooltip("Prefab for spawning the pool with")]
-        private GameObject poolPrefab;
+        protected GameObject poolPrefab;
 
         //[Header("---------------[[ REFERENCE ]]-----------------")]
-        private GameObject[] pooledObjects;
+        protected GameObject[] pooledObjects;
 
         [Header("---------------[[ STATS ]]-----------------")]
-        [SerializeField] private int count_allowedActiveInScene;
+        [SerializeField] protected int count_allowedActiveInScene;
 
-        private int index_lastMadeActive = -1;
+        protected int index_lastMadeActive = -1;
 
-        private void Awake()
-        {
-            if ( poolPrefab != null && count_allowedActiveInScene > 0 )
+		protected virtual void Awake()
+		{
+			if ( poolPrefab != null && count_allowedActiveInScene > 0 )
             {
                 pooledObjects = new GameObject[count_allowedActiveInScene];
                 for ( int i = 0; i < count_allowedActiveInScene; i++ )
@@ -42,7 +42,7 @@ namespace LogansPoolingSystem
         /// <param name="pos_passed"></param>
         /// <param name="rot_passed"></param>
         /// <returns></returns>
-        public GameObject CycleSpawnAtPosition( Vector3 pos_passed, Quaternion rot_passed )
+        public virtual GameObject CycleSpawnAtPosition( Vector3 pos_passed, Quaternion rot_passed )
         {
 			int nextPos = LPS_Utils.GetLoopedIndex( pooledObjects.Length, index_lastMadeActive + 1 );
 			GameObject go = pooledObjects[nextPos];
@@ -51,7 +51,7 @@ namespace LogansPoolingSystem
 
             go.transform.position = pos_passed;
             go.transform.rotation = rot_passed;
-			go.SetActive(true);
+			go.SetActive( true );
 
             return go;
         }
