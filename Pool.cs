@@ -14,6 +14,7 @@ namespace LogansPoolingSystem
 
         [Header("---------------[[ STATS ]]-----------------")]
         [SerializeField] private int count_allowedActiveInScene;
+
         private int index_lastMadeActive = -1;
 
         private void Awake()
@@ -28,24 +29,22 @@ namespace LogansPoolingSystem
                     g.SetActive( false );
                 }
             }
-            else if ( pooledObjects != null && pooledObjects.Length > 0 )
+            else
             {
-                foreach ( GameObject g in pooledObjects )
-                {
-                    g.SetActive( false );
-                }
+                DeactivateMyObjects();            
             }
         }
 
         /// <summary>
-        /// Main method for spawning/cycling a new pooled instance.
+        /// Main method for spawning/cycling a new pooled instance. NOTE: older objects are NOT currently deactivated, 
+		/// but rather get cycled to the newest position in the world.
         /// </summary>
         /// <param name="pos_passed"></param>
         /// <param name="rot_passed"></param>
         /// <returns></returns>
         public GameObject CycleSpawnAtPosition( Vector3 pos_passed, Quaternion rot_passed )
         {
-			int nextPos = GetLoopedIndex( pooledObjects.Length, index_lastMadeActive + 1 );
+			int nextPos = LPS_Utils.GetLoopedIndex( pooledObjects.Length, index_lastMadeActive + 1 );
 			GameObject go = pooledObjects[nextPos];
 
 			index_lastMadeActive = nextPos;
@@ -79,13 +78,13 @@ namespace LogansPoolingSystem
 		/// <returns></returns>
 		public List<GameObject> GetCurrentlyActiveInScene()
 		{
-			if (pooledObjects == null || pooledObjects.Length <= 0)
+			if ( pooledObjects == null || pooledObjects.Length <= 0 )
 			{
 				return null;
 			}
 
 			List<GameObject> activeObjects = new List<GameObject>();
-			foreach (GameObject g in pooledObjects)
+			foreach ( GameObject g in pooledObjects )
 			{
 				if (g.activeSelf)
 				{
@@ -94,32 +93,6 @@ namespace LogansPoolingSystem
 			}
 
 			return activeObjects;
-		}
-
-		/// <summary>
-		/// Returns a 'looped' index, meaning if the index goes above the passed list count, or below 0, it will loop the index while
-		/// staying within the list bounds.
-		/// </summary>
-		/// <param name="listCount_passed">count property of the list you're currently intending to cycle through</param>
-		/// <param name="index_passed">Your intended index. If the index goes above the count of the list that you pass, or below 0,
-		/// it will use this index as a staring point to determine the cycled index.</param>
-		/// <returns></returns>
-		private int GetLoopedIndex(int listCount_passed, int index_passed)
-		{
-			//TODO: Check for if the passed index is multiple times larger (or smaller, IE: negatives) than the passed list's count...
-
-			if ( index_passed >= listCount_passed )
-			{
-				return index_passed - listCount_passed;
-			}
-			else if ( index_passed < 0 )
-			{
-				return listCount_passed - Mathf.Abs( index_passed );
-			}
-			else
-			{
-				return index_passed;
-			}
 		}
 	}
 }

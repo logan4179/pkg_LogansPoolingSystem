@@ -1,6 +1,6 @@
 {
   "name": "com.loganland.loganspoolingsystem",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Logans Pooling System",
   "description": "Manages object pools.",
   "documentationUrl": "https://example.com/",
